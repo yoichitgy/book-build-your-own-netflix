@@ -7,9 +7,14 @@ name = "pypi"
 pandas = "*"
 requests = "*"
 tqdm = "*"
+fastapi = "*"
+uvicorn = {version = "*", extras = ["standard"]}
 
 [dev-packages]
 
 [requires]
 python_version = "3.11"
 python_full_version = "3.11.4"
+
+[scripts]
+server = "uvicorn app.main:app --reload"
