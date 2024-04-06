@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pandas = "*"
 requests = "*"
+tqdm = "*"
 
 [dev-packages]
 
