@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI, Query
+from recommender import item_based_recommendation
 from resolver import random_genres_items, random_items
 
 # Logger configuration
@@ -37,4 +38,5 @@ async def user_based(params: list[str] | None = Query(None)):
 
 @app.get("/item-based/{item_id}")
 async def item_based(item_id: str):
-    return {"message": f"item based: {item_id}"}
+    result = item_based_recommendation(item_id)
+    return {"result": result}

@@ -9,6 +9,7 @@ requests = "*"
 tqdm = "*"
 fastapi = "*"
 uvicorn = {version = "*", extras = ["standard"]}
+implicit = "*"
 
 [dev-packages]
 
@@ -18,3 +19,4 @@ python_full_version = "3.11.4"
 
 [scripts]
 server = "zsh -c 'cd app && uvicorn main:app --reload'"
+fitting = "zsh -c 'cd app && python recommender.py'"
