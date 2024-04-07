@@ -17,4 +17,4 @@ python_version = "3.11"
 python_full_version = "3.11.4"
 
 [scripts]
-server = "uvicorn app.main:app --reload"
+server = "zsh -c 'cd app && uvicorn main:app --reload'"
