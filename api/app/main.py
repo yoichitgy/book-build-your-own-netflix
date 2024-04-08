@@ -1,7 +1,7 @@
 import logging
 
 from fastapi import FastAPI, Query
-from recommender import item_based_recommendation
+from recommender import item_based_recommendation, user_based_recommendation
 from resolver import random_genres_items, random_items
 
 # Logger configuration
@@ -33,7 +33,9 @@ async def genre_movies(genre: str):
 
 @app.get("/user-based/")
 async def user_based(params: list[str] | None = Query(None)):
-    return {"message": f"User based"}
+    input_ratings = {int(x.split(":")[0]): float(x.split(":")[1]) for x in params}
+    result = user_based_recommendation(input_ratings)
+    return {"result": result}
 
 
 @app.get("/item-based/{item_id}")

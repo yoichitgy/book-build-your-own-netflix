@@ -64,5 +64,40 @@ def item_based_recommendation(item_id):
     return result_items
 
 
+def calculate_user_based(user_items, items):
+    loaded_model = pickle.load(open(saved_model_fname, "rb"))
+    recs = loaded_model.recommend(
+        userid=0,
+        user_items=user_items,
+        recalculate_user=True,
+        N=10,
+    )
+    print(recs)
+    return [str(items[r]) for r in recs[0]]
+
+
+def build_matrix_input(input_rating_dict, items):
+    model = pickle.load(open(saved_model_fname, "rb"))
+    item_ids = {r: i for i, r in items.items()}
+    mapped_idx = [item_ids[s] for s in input_rating_dict.keys() if s in item_ids]
+    data = [weight * float(x) for x in input_rating_dict.values()]
+    rows = [0 for _ in mapped_idx]
+    shape = (1, model.item_factors.shape[0])
+    return coo_matrix((data, (rows, mapped_idx)), shape=shape).tocsr()
+
+
+def user_based_recommendation(input_ratings):
+    ratings_df = pd.read_csv(data_fname)
+    ratings_df["userId"] = ratings_df["userId"].astype("category")
+    ratings_df["movieId"] = ratings_df["movieId"].astype("category")
+    movies_df = pd.read_csv(item_fname)
+    items = dict(enumerate(ratings_df["movieId"].cat.categories))
+    input_matrix = build_matrix_input(input_ratings, items)
+    result = calculate_user_based(input_matrix, items)
+    result = [int(x) for x in result]
+    result_items = movies_df[movies_df["movieId"].isin(result)].to_dict("records")
+    return result_items
+
+
 if __name__ == "__main__":
     model = model_train()
