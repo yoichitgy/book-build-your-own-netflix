@@ -56,7 +56,7 @@ def item_based_recommendation(item_id):
         parsed_id = ratings_df["movieId"].cat.categories.get_loc(int(item_id))
         result = calculate_item_based(parsed_id, items)
     except KeyError as e:
-        logger.error(f"Item ID {item_id} not found: {e}")
+        logger.warn(f"Item ID {item_id} not found: {e}")
         result = []
 
     result = [int(x) for x in result if x != item_id]
